@@ -8,7 +8,7 @@ on:
 
 jobs:
   call-workflow:
-    uses: COVESA/capicxx-core-runtime/.github/workflows/c-cpp.yml@3.2.3-r7
+    uses: COVESA/capicxx-core-runtime/blob/master/.github/workflows/c-cpp.yml@3.2.3-r7
 
   build:
     runs-on: ubuntu-latest
