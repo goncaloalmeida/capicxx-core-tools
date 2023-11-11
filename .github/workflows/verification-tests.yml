@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 jobs:
-  call-workflow-1-in-local-repo:
+  call-workflow:
     uses: COVESA/capicxx-core-runtime/.github/workflows/c-cpp.yml@3.2.3-r7
 
   build:
