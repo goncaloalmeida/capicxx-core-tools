@@ -1,0 +1,54 @@
+name: Run Verification Tests
+ 
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        path: capicxx-core-tools
+
+    - name: "Checkout capicxx-dbus-tools"
+      uses: actions/checkout@v3 
+      with:
+        repository: COVESA/capicxx-dbus-tools
+        path: capicxx-dbus-tools
+
+    - name: "Checkout capicxx-someip-tools"
+      uses: actions/checkout@v3 
+      with:
+        repository: COVESA/capicxx-someip-tools
+        path: capicxx-someip-tools
+
+    - name: "Checkout capicxx-core-runtime"
+      uses: actions/checkout@v3 
+      with:
+        repository: COVESA/capicxx-core-runtime
+        path: capicxx-core-runtime
+
+    - name: Set up JDK 8
+      uses: actions/setup-java@v1
+      with:
+        java-version: 8
+
+    - name: Build Verification Tests
+      run: |
+         cd capicxx-core-tools/org.genivi.commonapi.core.verification/
+         cmake
+          -B${{ github.workspace }}/build
+          -DCommonAPI_DIR=${{ github.workspace }}/capicxx-core-runtime/build \
+          -DCOMMONAPI_TOOL_GENERATOR=${{ github.workspace }}/capicxx-core-tools/org.genivi.commonapi.core.cli.product/target/products/org.genivi.commonapi.core.cli.product/linux/gtk/x86_64/commonapi-core-generator-linux-x86_64 \
+          -DCMAKE_GLUECODE_SOMEIP_NAME=SomeIPGlue \
+          -DSomeIPGlue_DIR=${{ github.workspace }}/capicxx-someip-tools/org.genivi.commonapi.someip.verification/build \
+          -DCMAKE_GLUECODE_DBUS_NAME=DBusGlue \
+          -DDBusGlue_DIR=${{ github.workspace }}/capicxx-dbus-tools/org.genivi.commonapi.dbus.verification/build
+         cmake --build ${{ github.workspace }}/build --target check
+
+    - name: Run Verification Tests
+      run: env -C ${{ github.workspace }}/build ctest -V
