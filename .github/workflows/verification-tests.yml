@@ -8,8 +8,8 @@ on:
 
 jobs:
   call-workflow-1-in-local-repo:
-    uses: COVESA/capicxx-core-runtime@v1
-    
+    uses: https://github.com/COVESA/capicxx-core-runtime/blob/master/.github/workflows/c-cpp.yml@3.2.3-r7
+
   build:
     runs-on: ubuntu-latest
     steps:
