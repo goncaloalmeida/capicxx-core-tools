@@ -1,5 +1,5 @@
 name: Run Verification Tests
- 
+
 on:
   push:
     branches: [ master ]
