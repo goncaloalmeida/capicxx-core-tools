@@ -42,7 +42,7 @@ jobs:
           -S capicxx-core-tools/org.genivi.commonapi.core.verification/  \
           -B${{ github.workspace }}/build  \
           -DCommonAPI_DIR=${{ github.workspace }}/capicxx-core-runtime/build \
-          -DCOMMONAPI_TOOL_GENERATOR=${{ github.workspace }}/capicxx-core-tools/org.genivi.commonapi.core.cli.product/target/products/org.genivi.commonapi.core.cli.product/linux/gtk/x86_64/commonapi-core-generator-linux-x86_64 \
+          -DCOMMONAPI_TOOL_GENERATOR=${{ github.workspace }}/org.genivi.commonapi.core.cli.product/target/products/org.genivi.commonapi.core.cli.product/linux/gtk/x86_64/commonapi-core-generator-linux-x86_64 \
           -DCMAKE_GLUECODE_SOMEIP_NAME=SomeIPGlue \
           -DSomeIPGlue_DIR=${{ github.workspace }}/capicxx-someip-tools/org.genivi.commonapi.someip.verification/build \
           -DCMAKE_GLUECODE_DBUS_NAME=DBusGlue \
