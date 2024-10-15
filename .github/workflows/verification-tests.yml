@@ -38,6 +38,7 @@ jobs:
 
     - name: Build Verification Tests
       run: |
+         ls -l
          cmake  \
           -S org.genivi.commonapi.core.verification/  \
           -B${{ github.workspace }}/build  \
