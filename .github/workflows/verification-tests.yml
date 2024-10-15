@@ -39,7 +39,7 @@ jobs:
           -DCommonAPI_DIR=${{ github.workspace }}/capicxx-core-runtime/build \
           -DCOMMONAPI_TOOL_GENERATOR=${{ github.workspace }}/org.genivi.commonapi.core.cli.product/target/products/org.genivi.commonapi.core.cli.product/linux/gtk/x86_64/commonapi-core-generator-linux-x86_64 \
           -DCMAKE_GLUECODE_SOMEIP_NAME=SomeIPGlue \
-          -DSomeIPGlue_DIR=${{ github.workspace }}/capicxx-someip-tools/org.genivi.commonapi.someip.verification/build \
+          -DSomeIPGlue_DIR=${{ github.workspace }}/capicxx-someip-tools/org.genivi.commonapi.someip.verification/build
          cmake --build ${{ github.workspace }}/build --target check
 
     - name: Run Verification Tests
