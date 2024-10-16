@@ -25,10 +25,56 @@ jobs:
         repository: COVESA/capicxx-core-runtime
         path: "capicxx-core-runtime"
 
+    - name: "Checkout vsomeip"
+      uses: actions/checkout@v4
+      with:
+        repository: COVESA/vsomeip
+        path: "vsomeip"
+
+    - name: "Checkout googletest"
+      uses: actions/checkout@v4
+      with:
+        repository: google/googletest
+        ref: v1.14.0
+        path: "googletest"
+
+    - name: "Checkout capicxx-someip-runtime"
+      uses: actions/checkout@v4
+      with:
+        repository: COVESA/capicxx-someip-runtime
+        path: "capicxx-someip-runtime"
+
     - name: Set up JDK 8
       uses: actions/setup-java@v1
       with:
         java-version: 8
+
+    - name: Ubuntu - Install boost 1.83.0 with gcc and x86
+      uses: MarkusJx/install-boost@v2.4.4
+      id: ubuntu-gcc-1_83-x86
+      with:
+        boost_version: 1.83.0
+        platform_version: 20.04
+        boost_install_dir: /home/runner
+        toolset: gcc
+        arch: x86
+        cache: true
+
+    - name: "Build capicxx-core-runtime"
+      run: |
+        cmake -S capicxx-core-runtime -B build-core-runtime -D CMAKE_INSTALL_PREFIX=install
+        cmake --build build-core-runtime --target install
+
+    - name: "Build vsomeip"
+      run: |
+        cmake -S vsomeip -B vsomeip -D GTEST_ROOT=${{ github.workspace }}/googletest -D BOOST_ROOT=/home/runner/boost/boost/ -D CMAKE_PREFIX_PATH=install -D CMAKE_INSTALL_PREFIX=install
+        cmake --build vsomeip
+        cmake --install vsomeip --strip
+
+    - name: "Build capicxx-someip-runtime"
+      run: |
+        cmake -S . -B build-someip-runtime -D GTEST_ROOT=/usr/src/googletest -D CMAKE_PREFIX_PATH=install -D CMAKE_INSTALL_PREFIX=install
+        cmake --build build-someip-runtime
 
     - name: Build Verification Tests
       run: |
@@ -36,7 +82,7 @@ jobs:
          cmake  \
           -S org.genivi.commonapi.core.verification/  \
           -B${{ github.workspace }}/build  \
-          -DCommonAPI_DIR=${{ github.workspace }}/capicxx-core-runtime/build \
+          -DCommonAPI_DIR=${{ github.workspace }}/install \
           -DCOMMONAPI_TOOL_GENERATOR=${{ github.workspace }}/org.genivi.commonapi.core.cli.product/target/products/org.genivi.commonapi.core.cli.product/linux/gtk/x86_64/commonapi-core-generator-linux-x86_64 \
           -DCMAKE_GLUECODE_SOMEIP_NAME=SomeIPGlue \
           -DSomeIPGlue_DIR=${{ github.workspace }}/capicxx-someip-tools/org.genivi.commonapi.someip.verification/build
